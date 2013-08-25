@@ -13,10 +13,6 @@ Password manager
 ----------------
 
 * A file `~/.cryptofile` is an EET file that contains a password for a given key. It is possible to encrypt it using the eet encryption.
-* pass -l : lists the keys for passwords
-* pass -s : give statistics on the file
-* pass -a <key> : Add the key for a password. The password will be asked safely later, and also the cipher key if you want to encrypt it
-* pass -k <key> : Get a password at key. The cipher key will be safely prompted. The password will be copy to the clipboard and ready to use. If the decryption failed because you mistyped the cipher key, the clipboard will contain junk.
 * pass -h : query help
 * pass -v : query version
 

@@ -1,4 +1,6 @@
 #!/bin/bash -e
+# Copyright (c) 2013 Jean Guyomarc'h
+# See license and stuff at the hosting page https://github.com/jeanguyomarch/pass
 
 # Globals
 PROGRAM="pass"
