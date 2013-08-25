@@ -1,0 +1,159 @@
+#!/bin/bash -e
+
+# Globals
+PROGRAM="pass"
+VERSION="1.0"
+KEY=
+VERBOSE=0
+CFILE="$HOME/.cryptofile"
+TFILE="$HOME/.cryptofile_tmp"
+
+# Functions
+function usage()
+{
+   echo "$PROGRAM usage:"
+   echo
+   echo "Add the [v] option for a verbose output (unsafe in public since your data will be displayed in stdout)"
+   echo
+   echo "   $PROGRAM -l          : Display the list of stored data"
+   echo "   $PROGRAM -[v]a <key> : Add a new string to the encrypted database"
+   echo "   $PROGRAM -[v]k <key> : Get the data stored for the given key"
+   echo "   $PROGRAM -d <key>    : Delete the given key"
+   echo "   $PROGRAM -s          : Give statistics about the encrypted database"
+   echo
+}
+
+function cleanup()
+{
+   rm -f "$TFILE"
+}
+# Securit: we store confidential data in a file as a temporary place, we need to delete it absolutely!
+trap cleanup EXIT
+
+function cipher()
+{
+   echo "Enter your cipher key:"
+   stty -echo
+   read KEY
+   stty echo
+}
+
+function version()
+{
+   echo "$PROGRAM version $VERSION"
+}
+
+function err()
+{
+   echo "*** $@" >&2
+}
+
+function list()
+{
+   eet -l "$CFILE"
+}
+
+function add()
+{
+   echo "Enter the data you want to store:"
+   stty -echo
+   read val
+   stty echo
+
+   cipher
+
+   echo "$val" > "$TFILE"
+   eet -i "$CFILE" "$1" "$TFILE" 1 "$KEY"
+   rm -f "$TFILE"
+
+   if [ $VERBOSE -eq 1 ]; then
+      echo "Storing [$1] -> [$val] for cipher key [$KEY]"
+   fi
+}
+
+function key()
+{
+   cipher
+
+   touch "$TFILE"
+   eet -x "$CFILE" "$1" "$TFILE" "$KEY"
+   val=`cat "$TFILE"`
+   rm -f "$TFILE"
+   echo -n "$val" | pbcopy
+
+   if [ $VERBOSE -eq 1 ]; then
+      echo "[$1] -> [$val] with cipher key [$KEY]"
+   fi
+}
+
+function del()
+{
+   eet -r "$CFILE" "$1"
+}
+
+function stats()
+{
+   eet -t "$CFILE"
+}
+
+# Cleanup
+rm -f "$TFILE"
+
+# Execute getopt
+if [ $# -eq 0 ]; then
+   usage
+   exit 1
+fi
+set -- $(getopt vhVla:k:d:s "$@")
+while [ $# -gt 0 ]; do
+   case "$1" in
+      -v)
+         VERBOSE=1
+         ;;
+      -h)
+         usage
+         exit 0
+         ;;
+      -V)
+         version
+         exit 0
+         ;;
+      -l)
+         list
+         exit 0
+         ;;
+      -a)
+         add "$2"
+         shift
+         exit 0
+         ;;
+      -k)
+         key "$2"
+         shift
+         exit 0
+         ;;
+      -d)
+         del "$2"
+         shift
+         exit 0
+         ;;
+      -s)
+         stats
+         exit 0
+         ;;
+      --)
+         shift
+         break
+         ;;
+      -*)
+         err "$PROGRAM: invalid argument"
+         usage
+         exit 1
+         ;;
+      *)
+         break
+         ;;
+   esac
+   shift
+done
+
