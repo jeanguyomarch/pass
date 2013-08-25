@@ -19,7 +19,7 @@ function usage()
    echo
    echo "   $PROGRAM -l          : Display the list of stored data"
    echo "   $PROGRAM -[v]a <key> : Add a new string to the encrypted database"
-   echo "   $PROGRAM -[v]k <key> : Get the data stored for the given key"
+   echo "   $PROGRAM -[v]x <key> : Get the data stored for the given key"
    echo "   $PROGRAM -d <key>    : Delete the given key"
    echo "   $PROGRAM -s          : Give statistics about the encrypted database"
    echo
@@ -98,6 +98,7 @@ function stats()
    eet -t "$CFILE"
 }
 
+touch "$CFILE"
 # Cleanup
 rm -f "$TFILE"
 
@@ -106,7 +107,7 @@ if [ $# -eq 0 ]; then
    usage
    exit 1
 fi
-set -- $(getopt vhVla:k:d:s "$@")
+set -- $(getopt vhVla:x:d:s "$@")
 while [ $# -gt 0 ]; do
    case "$1" in
       -v)
@@ -129,7 +130,7 @@ while [ $# -gt 0 ]; do
          shift
          exit 0
          ;;
-      -k)
+      -x)
          key "$2"
          shift
          exit 0
