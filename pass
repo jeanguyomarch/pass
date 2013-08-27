@@ -53,7 +53,7 @@ function err()
 
 function list()
 {
-   eet -l "$CFILE"
+   eet -l "$CFILE" | sort
 }
 
 function add()
