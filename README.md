@@ -6,6 +6,7 @@ Requirements
 ------------
 
 * `eet` must be installed http://docs.enlightenment.org/stable/eet/index.html
+* `openssl`
 * For now, the script is only Mac OS X compatible, feel free to import it
 
 

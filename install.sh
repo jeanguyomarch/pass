@@ -16,6 +16,7 @@ function usage()
 }
 
 check_eet="`which eet`"
+check_openssl="`which openssl`"
 check_os="`uname`"
 prefix="$1"
 
@@ -27,6 +28,11 @@ fi
 echo "Checking for eet... $check_eet"
 if [ $? -ne 0 ]; then
    err "'eet' not found"
+fi
+
+echo "Checking for openssl... $check_openssl"
+if [ $? -ne 0 ]; then
+   err "'openssl' not found"
 fi
 
 echo "Checking for OS... $check_os"
