@@ -20,7 +20,7 @@ function usage()
    echo
    echo "   $PROGRAM -l                     : Display the list of stored data"
    echo "   $PROGRAM -[v]a <key>            : Add a new string to the encrypted database (or replace an existing value)"
-   echo "   $PROGRAM -[v]x <key> [cipher]   : Get the data stored for the given key"
+   echo "   $PROGRAM -[v]x <key>            : Get the data stored for the given key"
    echo "   $PROGRAM -d <key>               : Delete the given key"
    echo "   $PROGRAM -s                     : Give statistics about the encrypted database"
    echo "   $PROGRAM -g                     : Generates a random password in your clipboard using openSSL"
@@ -223,9 +223,6 @@ while [ $# -gt 0 ]; do
          exit 0
          ;;
       -x)
-         if [ x"$arg3" != "x" ]; then
-            KEY="$arg3"
-         fi
          key "$2"
          shift
          exit 0
