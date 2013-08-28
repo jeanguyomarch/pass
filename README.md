@@ -15,15 +15,17 @@ Password manager
 
 * A file `~/.cryptofile` is an EET file that contains a password for a given key. It is possible to encrypt it using the eet encryption.
 * `pass -h` : query help
-* `pass -v` : query version
+* `pass -V` : query version
+* `pass -L` : query license
+* `man path` for full info
 
 
 Installation
 ------------
 
 * Query help: `./install.sh --help` or `./install.sh -h` `./install.sh -help`
-* To install it at `/usr/local/bin` just run `./install.sh`. Requirements checks are made, and your password will be asked if all the requirements are fulfilled.
-* To install it at a custom path: `./install.sh /your/custom/path`
+* To install it at `/usr/local` just run `./install.sh`. Requirements checks are made, and your password will be asked if all the requirements are fulfilled.
+* To install it at a custom prefix: `./install.sh /your/custom/prefix`
 
 
 Copying
