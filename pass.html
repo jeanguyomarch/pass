@@ -1,0 +1,227 @@
+<!-- Creator     : groff version 1.19.2 -->
+<!-- CreationDate: Wed Aug 28 16:07:42 2013 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p     { margin-top: 0; margin-bottom: 0; }
+       pre   { margin-top: 0; margin-bottom: 0; }
+       table { margin-top: 0; margin-bottom: 0; }
+</style>
+<title>man</title>
+
+</head>
+<body>
+
+<h1 align=center>man</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<a name="NAME"></a>
+<h2>NAME</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">pass &minus;
+password manager</p>
+
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">pass
+-[v]laxdsgrVL</p>
+
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">pass allows you
+to manage your passwords in an encrypted file by assigning
+to a password a public key.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Example: to add
+a password for a github account, let&rsquo;s call the key
+&rsquo;github_password&rsquo; and let&rsquo;s say your
+github&rsquo;s password is &rsquo;1234&rsquo; <br>
+pass -a github_password then enter your password
+&rsquo;1234&rsquo; (the input is masked) then enter your
+cipher key. If you forget it, you cannot access your
+password back! It will be definitly lost! <br>
+pass -x github_password then enter your cipher key,
+&rsquo;1234&rsquo; is now in your clipboard if you entered
+the right cipher key</p>
+
+<a name="OPTIONS"></a>
+<h2>OPTIONS</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The -v option
+allows a verbose output when adding (-a) and extracting (-x)
+data from the encrypted file. All the data will be displayed
+in stdout. <b><br>
+&minus;[v]a</b> <i>key</i></p>
+
+<p style="margin-left:22%;">add/replace a password for
+&lt;key&gt;</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p style="margin-top: 1em" valign="top"><b>&minus;d</b>
+<i>key</i></p> </td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p style="margin-top: 1em" valign="top">delete the password
+stored for &lt;key&gt;. It asks confirmation but will not
+ask for a cipher key!</p></td>
+</table>
+
+<p style="margin-left:11%;"><b>&minus;g</b>
+<i>[digits]</i></p>
+
+<p style="margin-left:22%;">generates a random password
+using openSSL (default: 64 digits) [digits] cannot be
+greater than 64</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+
+<p style="margin-top: 1em" valign="top"><b>&minus;l</b></p> </td>
+<td width="12%"></td>
+<td width="45%">
+
+
+<p style="margin-top: 1em" valign="top">lists all the
+registered keys</p></td>
+<td width="29%">
+</td>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+
+<p style="margin-top: 1em" valign="top"><b>&minus;L</b></p> </td>
+<td width="12%"></td>
+<td width="45%">
+
+
+<p style="margin-top: 1em" valign="top">show the
+license</p> </td>
+<td width="29%">
+</td>
+</table>
+
+<p style="margin-left:11%;"><b>&minus;r</b> <i>old_key
+new_key</i></p>
+
+<p style="margin-left:22%;">Rename a key</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+
+<p style="margin-top: 1em" valign="top"><b>&minus;s</b></p> </td>
+<td width="12%"></td>
+<td width="48%">
+
+
+<p style="margin-top: 1em" valign="top">gives statistics
+about the file</p></td>
+<td width="26%">
+</td>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+
+<p style="margin-top: 1em" valign="top"><b>&minus;V</b></p> </td>
+<td width="12%"></td>
+<td width="48%">
+
+
+<p style="margin-top: 1em" valign="top">shows the
+version</p> </td>
+<td width="26%">
+</td>
+</table>
+
+<p style="margin-left:11%;"><b>&minus;[v]x</b> <i>key</i>
+<b>[</b><i>cipher</i>]</p>
+
+<p style="margin-left:22%;">extract the password for the
+key. Optionnally takes the cipher key as a parameter instead
+of prompting it.</p>
+
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Jean
+Guyomarc&rsquo;h &lt;jean.guyomarch@gmail.com&gt;</p>
+
+<a name="COPYRIGHT"></a>
+<h2>COPYRIGHT</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The MIT License
+(MIT)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Copyright (c)
+2013 Jean Guyomarc&rsquo;h</p>
+
+<p style="margin-left:11%; margin-top: 1em">Permission is
+hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files
+(the &quot;Software&quot;), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom
+the Software is furnished to do so, subject to the following
+conditions:</p>
+
+<p style="margin-left:11%; margin-top: 1em">The above
+copyright notice and this permission notice shall be
+included in all copies or substantial portions of the
+Software.</p>
+
+<p style="margin-left:11%; margin-top: 1em">THE SOFTWARE IS
+PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<hr>
+</body>
+</html>

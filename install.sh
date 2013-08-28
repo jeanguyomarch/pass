@@ -48,6 +48,9 @@ if [ $# -eq 0 ]; then
    prefix="/usr/local"
 fi
 
+echo "Creating html doc in `pwd`"
+cat pass.1 | groff -mandoc -Thtml > pass.html
+
 echo "Installing with prefix [$prefix]"
 
 sudo install -m 0755 pass "$prefix/bin"
