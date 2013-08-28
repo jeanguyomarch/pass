@@ -120,7 +120,13 @@ function key()
 
 function del()
 {
-   eet -r "$CFILE" "$1"
+   echo "You are going to remove definitly [$1]. Please confirm with [y], any other key to abort"
+   read val
+   if [ x"$val" == "xy" ] || [ x"$val" == "xY" ]; then
+      eet -r "$CFILE" "$1"
+   else
+      echo "Deletion of [$1] aborted."
+   fi
 }
 
 function stats()
@@ -210,6 +216,10 @@ while [ $# -gt 0 ]; do
          exit 0
          ;;
       -r)
+         if [ ${#arg3} -lt 1 ]; then
+            err "New key is [$arg3]"
+            exit 1
+         fi
          ren "$2" "$arg3"
          exit 0
          ;;

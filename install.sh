@@ -54,7 +54,7 @@ sudo install -m 0755 pass "$prefix/bin"
 echo "(bin) $prefix/bin"
 manpath="/usr/share/man/man1"
 sudo install -g 0 -o 0 -m 0644 pass.1 "$manpath"
-sudo gzip "$manpath/pass.1"
+sudo gzip -f "$manpath/pass.1"
 echo "(man) $manpath/pass.1.gz"
 
 
