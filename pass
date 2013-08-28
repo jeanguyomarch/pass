@@ -20,7 +20,7 @@ function usage()
    echo
    echo "   $PROGRAM -l                     : Display the list of stored data"
    echo "   $PROGRAM -[v]a <key>            : Add a new string to the encrypted database (or replace an existing value)"
-   echo "   $PROGRAM -[v]x <key>            : Get the data stored for the given key"
+   echo "   $PROGRAM -[v]x <key> [cipher]   : Get the data stored for the given key"
    echo "   $PROGRAM -d <key>               : Delete the given key"
    echo "   $PROGRAM -s                     : Give statistics about the encrypted database"
    echo "   $PROGRAM -g                     : Generates a random password in your clipboard using openSSL"
@@ -28,6 +28,16 @@ function usage()
    echo "   $PROGRAM -V                     : Shows the version of $0"
    echo "   $PROGRAM -L                     : Shows the license of $0"
    echo
+}
+
+function copy()
+{
+   echo -n "$@" | pbcopy
+}
+
+function paste()
+{
+   pbpaste
 }
 
 function cleanup()
@@ -39,10 +49,12 @@ trap cleanup EXIT
 
 function cipher()
 {
-   echo "Enter your cipher key:"
-   stty -echo
-   read KEY
-   stty echo
+   if [ x"$KEY" == "x" ]; then
+      echo "Enter your cipher key:"
+      stty -echo
+      read KEY
+      stty echo
+   fi
 }
 
 function version()
@@ -111,7 +123,7 @@ function key()
    eet -x "$CFILE" "$1" "$TFILE" "$KEY"
    val=`cat "$TFILE"`
    rm -f "$TFILE"
-   echo -n "$val" | pbcopy
+   copy "$val"
 
    if [ $VERBOSE -eq 1 ]; then
       echo "[$1] -> [$val] with cipher key [$KEY]"
@@ -120,12 +132,16 @@ function key()
 
 function del()
 {
-   echo "You are going to remove definitly [$1]. Please confirm with [y], any other key to abort"
-   read val
-   if [ x"$val" == "xy" ] || [ x"$val" == "xY" ]; then
-      eet -r "$CFILE" "$1"
+   if [ x"$2" != x"--force" ]; then
+      echo "You are going to remove definitly [$1]. Please confirm with [y], any other key to abort"
+      read val
+      if [ x"$val" == "xy" ] || [ x"$val" == "xY" ]; then
+         eet -r "$CFILE" "$1"
+      else
+         echo "Deletion of [$1] aborted."
+      fi
    else
-      echo "Deletion of [$1] aborted."
+      eet -r "$CFILE" "$1"
    fi
 }
 
@@ -137,7 +153,16 @@ function stats()
 function gen()
 {
    val=`openssl rand -base64 48`
-   echo -n "$val" | pbcopy
+   if [ x"$1" == "x" ]; then
+      copy "$val"
+   else
+      if [ $1 -gt 64 ]; then
+         err "Cannot have more than 64 digits"
+         exit 1
+      fi
+      str=${val:0:$1}
+      copy "$str"
+   fi
 }
 
 function ren()
@@ -145,15 +170,15 @@ function ren()
    old="$1"
    new="$2"
 
-   pboard="`pbpaste`"
+   pboard="`paste`"
    key "$1"
-   val=`pbpaste`
-   del "$1"
+   val=`paste`
+   del "$1" --force
 
    echo "$val" > "$TFILE"
    eet -i "$CFILE" "$new" "$TFILE" 1 "$KEY"
    rm -f "$TFILE"
-   echo "$pboard" | pbcopy
+   copy "$pboard"
 }
 
 touch "$CFILE"
@@ -198,6 +223,9 @@ while [ $# -gt 0 ]; do
          exit 0
          ;;
       -x)
+         if [ x"$arg3" != "x" ]; then
+            KEY="$arg3"
+         fi
          key "$2"
          shift
          exit 0
@@ -212,7 +240,7 @@ while [ $# -gt 0 ]; do
          exit 0
          ;;
       -g)
-         gen
+         gen "$arg2"
          exit 0
          ;;
       -r)
