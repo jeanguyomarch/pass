@@ -13,6 +13,7 @@ TFILE="$HOME/.cryptofile_tmp"
 # Functions
 function usage()
 {
+   echo
    echo "$PROGRAM usage:"
    echo
    echo "Add the [v] option for a verbose output (unsafe in public since your data will be displayed in stdout)"
