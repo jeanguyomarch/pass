@@ -7,7 +7,7 @@ function err()
    echo >&2
    echo "*** [install:error$?] $@" >&2
    echo >&2
-   exit 2
+   exit 1
 }
 
 function usage()
@@ -15,9 +15,24 @@ function usage()
    echo "Usage: ./install.sh [prefix]. The default prefix is /usr/local/bin"
 }
 
-check_eet="`which eet`"
-check_openssl="`which openssl`"
-check_os="`uname`"
+function check_os()
+{
+   os="`uname`"
+   echo "Checking for OS... $os"
+   if [ "$os" != "Darwin" ]; then
+      err "Mac OS X 'Darwin' required"
+   fi
+}
+
+function check_program()
+{
+   prog="`which "$1"`"
+   echo "Checking for $1... $prog"
+   if [ $? -ne 0 ]; then
+      err "'$1' not found"
+   fi
+}
+
 prefix="$1"
 
 if [ x"$1" == x"--help" ] || [ x"$1" == x"-help" ] || [ x"$1" == x"-h" ]; then
@@ -25,20 +40,9 @@ if [ x"$1" == x"--help" ] || [ x"$1" == x"-help" ] || [ x"$1" == x"-h" ]; then
    exit 0
 fi
 
-echo "Checking for eet... $check_eet"
-if [ $? -ne 0 ]; then
-   err "'eet' not found"
-fi
-
-echo "Checking for openssl... $check_openssl"
-if [ $? -ne 0 ]; then
-   err "'openssl' not found"
-fi
-
-echo "Checking for OS... $check_os"
-if [ "$check_os" != "Darwin" ]; then
-   err "Mac OS X 'Darwin' required"
-fi
+check_os
+check_program "eet"
+check_program "openssl"
 
 if [ $# -eq 0 ]; then
    prefix="/usr/local/bin"
