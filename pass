@@ -25,6 +25,8 @@ function usage()
    echo "   $PROGRAM -s                     : Give statistics about the encrypted database"
    echo "   $PROGRAM -g                     : Generates a random password in your clipboard using openSSL"
    echo "   $PROGRAM -r <old key> <new key> : Rename a key with another"
+   echo "   $PROGRAM -V                     : Shows the version of $0"
+   echo "   $PROGRAM -L                     : Shows the license of $0"
    echo
 }
 
@@ -46,6 +48,31 @@ function cipher()
 function version()
 {
    echo "$PROGRAM version $VERSION"
+}
+
+function license()
+{
+   echo "The MIT License (MIT)"
+   echo
+   echo "Copyright (c) 2013 Jean Guyomarc'h"
+   echo
+   echo "Permission is hereby granted, free of charge, to any person obtaining a copy"
+   echo "of this software and associated documentation files (the \"Software\"), to deal"
+   echo "in the Software without restriction, including without limitation the rights"
+   echo "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
+   echo "copies of the Software, and to permit persons to whom the Software is"
+   echo "furnished to do so, subject to the following conditions:"
+   echo
+   echo "The above copyright notice and this permission notice shall be included in"
+   echo "all copies or substantial portions of the Software."
+   echo
+   echo "THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
+   echo "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
+   echo "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE"
+   echo "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+   echo "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
+   echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN"
+   echo "THE SOFTWARE."
 }
 
 function err()
@@ -137,7 +164,7 @@ arg1="$1"
 arg2="$2"
 arg3="$3"
 
-set -- $(getopt vhVla:x:d:sgr:: "$@")
+set -- $(getopt vhVLla:x:d:sgr:: "$@")
 while [ $# -gt 0 ]; do
    case "$1" in
       -v)
@@ -149,6 +176,10 @@ while [ $# -gt 0 ]; do
          ;;
       -V)
          version
+         exit 0
+         ;;
+      -L)
+         license
          exit 0
          ;;
       -l)

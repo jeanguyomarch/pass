@@ -12,7 +12,7 @@ function err()
 
 function usage()
 {
-   echo "Usage: ./install.sh [prefix]. The default prefix is /usr/local/bin"
+   echo "Usage: ./install.sh [prefix]. The default prefix is /usr/local"
 }
 
 function check_os()
@@ -45,11 +45,16 @@ check_program "eet"
 check_program "openssl"
 
 if [ $# -eq 0 ]; then
-   prefix="/usr/local/bin"
+   prefix="/usr/local"
 fi
 
-echo "Installing at path [$prefix]"
+echo "Installing with prefix [$prefix]"
 
-sudo install -m 0755 pass "$prefix"
+sudo install -m 0755 pass "$prefix/bin"
+echo "(bin) $prefix/bin"
+manpath="/usr/share/man/man1"
+sudo install -g 0 -o 0 -m 0644 pass.1 "$manpath"
+sudo gzip "$manpath/pass.1"
+echo "(man) $manpath/pass.1.gz"
 
 
