@@ -17,12 +17,13 @@ function usage()
    echo
    echo "Add the [v] option for a verbose output (unsafe in public since your data will be displayed in stdout)"
    echo
-   echo "   $PROGRAM -l          : Display the list of stored data"
-   echo "   $PROGRAM -[v]a <key> : Add a new string to the encrypted database"
-   echo "   $PROGRAM -[v]x <key> : Get the data stored for the given key"
-   echo "   $PROGRAM -d <key>    : Delete the given key"
-   echo "   $PROGRAM -s          : Give statistics about the encrypted database"
-   echo "   $PROGRAM -g          : Generates a random password in your clipboard using openSSL"
+   echo "   $PROGRAM -l                     : Display the list of stored data"
+   echo "   $PROGRAM -[v]a <key>            : Add a new string to the encrypted database"
+   echo "   $PROGRAM -[v]x <key>            : Get the data stored for the given key"
+   echo "   $PROGRAM -d <key>               : Delete the given key"
+   echo "   $PROGRAM -s                     : Give statistics about the encrypted database"
+   echo "   $PROGRAM -g                     : Generates a random password in your clipboard using openSSL"
+   echo "   $PROGRAM -r <old key> <new key> : Rename a key with another"
    echo
 }
 
@@ -105,6 +106,22 @@ function gen()
    echo -n "$val" | pbcopy
 }
 
+function ren()
+{
+   old="$1"
+   new="$2"
+
+   pboard="`pbpaste`"
+   key "$1"
+   val=`pbpaste`
+   del "$1"
+
+   echo "$val" > "$TFILE"
+   eet -i "$CFILE" "$new" "$TFILE" 1 "$KEY"
+   rm -f "$TFILE"
+   echo "$pboard" | pbcopy
+}
+
 touch "$CFILE"
 # Cleanup
 rm -f "$TFILE"
@@ -114,7 +131,12 @@ if [ $# -eq 0 ]; then
    usage
    exit 1
 fi
-set -- $(getopt vhVla:x:d:sg "$@")
+
+arg1="$1"
+arg2="$2"
+arg3="$3"
+
+set -- $(getopt vhVla:x:d:sgr:: "$@")
 while [ $# -gt 0 ]; do
    case "$1" in
       -v)
@@ -153,6 +175,10 @@ while [ $# -gt 0 ]; do
          ;;
       -g)
          gen
+         exit 0
+         ;;
+      -r)
+         ren "$2" "$arg3"
          exit 0
          ;;
       --)
