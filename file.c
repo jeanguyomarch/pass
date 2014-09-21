@@ -60,12 +60,6 @@ file_shutdown(void)
      }
 }
 
-const char *
-file_get(void)
-{
-   return _file;
-}
-
 int
 file_list(void)
 {
@@ -142,6 +136,23 @@ file_del(const char *key)
      }
 
    return 0;
+}
+
+char *
+file_get(const char *key,
+         const char *cipher)
+{
+   EINA_SAFETY_ON_NULL_RETURN_VAL(key, NULL);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, NULL);
+
+   void *data;
+   int size;
+
+   _file_open_ro();
+   data = eet_read_cipher(_ef, key, &size, cipher);
+   _file_close();
+
+   return data;
 }
 
 Eina_Bool

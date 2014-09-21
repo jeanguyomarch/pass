@@ -167,6 +167,35 @@ _pass_del(const char *key)
    return status;
 }
 
+static int
+_pass_extract(const char *key)
+{
+   EINA_SAFETY_ON_NULL_RETURN_VAL(key, 2);
+
+   char *data, *cipher;
+   Eina_Bool chk;
+
+   if (!file_entry_exists(key))
+     {
+        ERR("Entry \"%s\" does not exist", key);
+        return 1;
+     }
+
+   output("Write your decipher key:\n");
+   cipher = tty_string_silent_get(NULL);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, 2);
+
+   data = file_get(key, cipher);
+   chk = clipboard_set(data, -1);
+   if (!chk)
+     CRI("Failed to set data to clipboard");
+
+   free(cipher);
+   free(data);
+
+   return (!chk); // 0 if chk is TRUE
+}
+
 /*============================================================================*
  *                                    Main                                    *
  *============================================================================*/
@@ -230,9 +259,17 @@ main(int    argc,
         goto end;
      }
 
+   /* Delete an entry */
    if (del_opt)
      {
         status = _pass_del(del_opt);
+        goto end;
+     }
+
+   /* Get the content of an entry */
+   if (get_opt)
+     {
+        status = _pass_extract(get_opt);
         goto end;
      }
 

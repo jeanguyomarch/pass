@@ -19,13 +19,13 @@ extern int _pass_log_dom;
 
 Eina_Bool file_init(void);
 void file_shutdown(void);
-const char *file_get(void);
 Eina_Bool file_entry_exists(const char *key);
 
 int file_stats(void);
 int file_list(void);
 int file_add(const char *key, const char *data, const char *cipher);
 int file_del(const char *key);
+char *file_get(const char *key, const char *cipher);
 
 Eina_Bool clipboard_init(void);
 void clipboard_shutdown(void);
@@ -41,8 +41,8 @@ typedef void (*Output_Func)(const char *format, ...);
 extern Clipboard_Set_Func clipboard_set;
 extern Output_Func output;
 
-#if defined(__MacOSX__) || (defined(__APPLE__) && defined(__MACH__))
-# define HAVE_OSX
+#ifdef HAVE_OSX
+Eina_Bool clipboard_cocoa_set(const char *data, int data_len);
 #endif
 
 #endif /* ! _PASS_H_ */
