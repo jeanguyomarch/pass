@@ -1,5 +1,6 @@
-*.swo
-*.swp
+*.sw?
 *.DS_Store
 *~
-*cryptofile
+*.o
+/pass
+
