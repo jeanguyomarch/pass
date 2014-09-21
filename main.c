@@ -76,6 +76,46 @@ _shutdown(void)
 }
 
 /*============================================================================*
+ *                             Password Generation                            *
+ *============================================================================*/
+
+static int 
+_password_gen(unsigned char len)
+{
+   /* Ascii characters to use */
+   int start = 32, stop = 125;
+   int nope[] = {
+        96, // ` (grave accent)
+        0   // SENTINEL
+   };
+   char *buf;
+   int i;
+   int *ptr;
+   Eina_Bool chk;
+
+   buf = alloca(len + 1);
+   for (i = 0; i < len; i++)
+     {
+again:
+        /* Char in the allowed range */
+        buf[i] = rand() % (stop - start) + start;
+
+        /* Reject nope characters */
+        ptr = nope;
+        while (*ptr != 0)
+          {
+             if (buf[i] == *ptr)
+               goto again;
+             ptr++;
+          }
+     }
+   buf[len] = 0;
+   chk = clipboard_set(buf, len);
+
+   return (!chk); // 0 is chk was true
+}
+
+/*============================================================================*
  *                                   Getopt                                   *
  *============================================================================*/
 
@@ -83,7 +123,7 @@ static const Ecore_Getopt _options =
 {
    "pass",
    "%prog [options] (at least one)",
-   "1.0",
+   "1.1",
    "(C) 2013-2014 Jean Guyomarc'h",
    "MIT",
    "A command-line password manager",
@@ -93,7 +133,7 @@ static const Ecore_Getopt _options =
       ECORE_GETOPT_STORE_STR('a', "add", "Add a new string to the encrypted database"),
       ECORE_GETOPT_STORE_STR('d', "delete", "Deletes the entry for the given key"),
       ECORE_GETOPT_STORE_STR('x', "extract", "Extracts the entry for the given key"),
-      ECORE_GETOPT_STORE_TRUE('g', "generate", "Generates a random password in your clipboard using openSSL"),
+      ECORE_GETOPT_STORE_DEF_SHORT('g', "generate", "Generates a random password in your clipboard", 32),
       ECORE_GETOPT_STORE_STR('r', "replace", "Replace by the provided key"),
       ECORE_GETOPT_STORE_STR('R', "rename", "Rename the provided key"),
       ECORE_GETOPT_HELP ('h', "help"),
@@ -236,7 +276,7 @@ main(int    argc,
 {
    Eina_Bool quit_opt = EINA_FALSE;
    Eina_Bool list_opt = EINA_FALSE;
-   Eina_Bool gen_opt = EINA_FALSE;
+   short gen_opt = 0;
    char *add_opt = NULL;
    char *del_opt = NULL;
    char *get_opt = NULL;
@@ -250,7 +290,7 @@ main(int    argc,
         ECORE_GETOPT_VALUE_STR(add_opt),
         ECORE_GETOPT_VALUE_STR(del_opt),
         ECORE_GETOPT_VALUE_STR(get_opt),
-        ECORE_GETOPT_VALUE_BOOL(gen_opt),
+        ECORE_GETOPT_VALUE_SHORT(gen_opt),
         ECORE_GETOPT_VALUE_STR(replace_opt),
         ECORE_GETOPT_VALUE_STR(rename_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
@@ -313,10 +353,18 @@ main(int    argc,
         goto end;
      }
 
-   /* Only replace option */
+   /* Replace the content of an entry */
    if (replace_opt)
      {
         status = _pass_add(replace_opt, EINA_FALSE);
+        goto end;
+     }
+
+   /* Generate the password */
+   if (gen_opt > 0)
+     {
+        if (gen_opt > 64) gen_opt = 64;
+        status = _password_gen(gen_opt);
         goto end;
      }
 
