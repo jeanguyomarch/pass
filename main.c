@@ -113,14 +113,15 @@ _help_show(void)
  *============================================================================*/
 
 static int
-_pass_add(const char *key)
+_pass_add(const char *key,
+          Eina_Bool   strict)
 {
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, 2);
 
    char *password = NULL, *cipher = NULL;
    int status;
 
-   if (file_entry_exists(key))
+   if (strict && file_entry_exists(key))
      {
         ERR("Entry \"%s\" already exists", key);
         return 2;
@@ -282,16 +283,7 @@ main(int    argc,
    /* Add an entry */
    if (add_opt)
      {
-        if (replace_opt)
-          {
-             status = _pass_del(replace_opt, "replace");
-             if (status != 0)
-               {
-                  ERR("Failed to remove key \"%s\"", replace_opt);
-                  goto end;
-               }
-          }
-        status = _pass_add(add_opt);
+        status = _pass_add(add_opt, EINA_TRUE);
         goto end;
      }
 
@@ -324,8 +316,7 @@ main(int    argc,
    /* Only replace option */
    if (replace_opt)
      {
-        ERR("The --replace option must be used with the --add or --rename option\n");
-        _help_show();
+        status = _pass_add(replace_opt, EINA_FALSE);
         goto end;
      }
 
