@@ -79,7 +79,7 @@ _shutdown(void)
  *                             Password Generation                            *
  *============================================================================*/
 
-static int 
+static int
 _password_gen(unsigned char len)
 {
    /* Ascii characters to use */
@@ -135,7 +135,7 @@ static const Ecore_Getopt _options =
       ECORE_GETOPT_STORE_STR('x', "extract", "Extracts the entry for the given key"),
       ECORE_GETOPT_STORE_DEF_SHORT('g', "generate", "Generates a random password in your clipboard", 32),
       ECORE_GETOPT_STORE_STR('r', "replace", "Replace by the provided key"),
-      ECORE_GETOPT_STORE_STR('R', "rename", "Rename the provided key"),
+      // FIXME ECORE_GETOPT_STORE_STR('R', "rename", "Rename the provided key"),
       ECORE_GETOPT_HELP ('h', "help"),
       ECORE_GETOPT_VERSION('V', "version"),
       ECORE_GETOPT_SENTINEL
@@ -244,7 +244,7 @@ _pass_extract(const char *key)
    return (!chk); // 0 if chk is TRUE
 }
 
-static int
+static EINA_UNUSED int // FIXME << Remove EINA_UNUSED
 _pass_rename(const char *old_key,
              const char *new_key)
 {
@@ -281,7 +281,7 @@ main(int    argc,
    char *del_opt = NULL;
    char *get_opt = NULL;
    char *replace_opt = NULL;
-   char *rename_opt = NULL;
+   // FIXME  char *rename_opt = NULL;
    int args;
    int status = EXIT_FAILURE;
 
@@ -292,7 +292,7 @@ main(int    argc,
         ECORE_GETOPT_VALUE_STR(get_opt),
         ECORE_GETOPT_VALUE_SHORT(gen_opt),
         ECORE_GETOPT_VALUE_STR(replace_opt),
-        ECORE_GETOPT_VALUE_STR(rename_opt),
+        //FIXME        ECORE_GETOPT_VALUE_STR(rename_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
         ECORE_GETOPT_VALUE_NONE
@@ -341,17 +341,17 @@ main(int    argc,
         goto end;
      }
 
-   /* Rename an entry */
-   if (rename_opt)
-     {
-        if (!replace_opt)
-          {
-             ERR("This options must be used in pair with --replace");
-             goto end;
-          }
-        status = _pass_rename(rename_opt, replace_opt);
-        goto end;
-     }
+   // FIXME /* Rename an entry */
+   // FIXME if (rename_opt)
+   // FIXME   {
+   // FIXME      if (!replace_opt)
+   // FIXME        {
+   // FIXME           ERR("This options must be used in pair with --replace");
+   // FIXME           goto end;
+   // FIXME        }
+   // FIXME      status = _pass_rename(rename_opt, replace_opt);
+   // FIXME      goto end;
+   // FIXME   }
 
    /* Replace the content of an entry */
    if (replace_opt)
