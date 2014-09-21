@@ -103,6 +103,12 @@ static const Ecore_Getopt _options =
    }
 };
 
+static inline void
+_help_show(void)
+{
+   ecore_getopt_help(stderr, &_options);
+}
+
 /*============================================================================*
  *                                   Helpers                                  *
  *============================================================================*/
@@ -142,9 +148,11 @@ end:
 }
 
 static int
-_pass_del(const char *key)
+_pass_del(const char *key,
+          const char *verb)
 {
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, 2);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(verb, 2);
 
    char *str;
    int status;
@@ -155,7 +163,8 @@ _pass_del(const char *key)
         return 1;
      }
 
-   output("Are you sure to delete \"%s\". It cannot be recovered! [y/N] ", key);
+   output("Are you sure to %s \"%s\". It cannot be recovered! [y/N] ",
+          verb, key);
    str = tty_string_get(NULL);
    if ((str != NULL) && (str[0] == 'y' || str[0] == 'Y'))
      status = file_del(key);
@@ -230,7 +239,7 @@ main(int    argc,
    args = ecore_getopt_parse(&_options, values, argc, argv);
    if (args == 1)
      {
-        ecore_getopt_help(stderr, &_options);
+        _help_show();
         return EXIT_FAILURE;
      }
    else if (args < 0)
@@ -252,6 +261,15 @@ main(int    argc,
    /* Add an entry */
    if (add_opt)
      {
+        if (replace_opt)
+          {
+             status = _pass_del(replace_opt, "replace");
+             if (status != 0)
+               {
+                  ERR("Failed to remove key \"%s\"", replace_opt);
+                  goto end;
+               }
+          }
         status = _pass_add(add_opt);
         goto end;
      }
@@ -259,7 +277,7 @@ main(int    argc,
    /* Delete an entry */
    if (del_opt)
      {
-        status = _pass_del(del_opt);
+        status = _pass_del(del_opt, "delete");
         goto end;
      }
 
@@ -267,6 +285,15 @@ main(int    argc,
    if (get_opt)
      {
         status = _pass_extract(get_opt);
+        goto end;
+     }
+
+   /* Only replace option */
+   if (replace_opt)
+     {
+        status = 1;
+        CRI("The --replace option must be used with the --add option\n");
+        _help_show();
         goto end;
      }
 
