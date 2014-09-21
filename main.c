@@ -93,7 +93,6 @@ static const Ecore_Getopt _options =
       ECORE_GETOPT_STORE_STR('a', "add", "Add a new string to the encrypted database"),
       ECORE_GETOPT_STORE_STR('d', "delete", "Deletes the entry for the given key"),
       ECORE_GETOPT_STORE_STR('x', "extract", "Extracts the entry for the given key"),
-      ECORE_GETOPT_STORE_TRUE('s', "stats", "Display statistics about the database"),
       ECORE_GETOPT_STORE_TRUE('g', "generate", "Generates a random password in your clipboard using openSSL"),
       ECORE_GETOPT_STORE_STR('r', "replace", "Replace by the provided key"),
       ECORE_GETOPT_HELP ('h', "help"),
@@ -206,7 +205,6 @@ main(int    argc,
 {
    Eina_Bool quit_opt = EINA_FALSE;
    Eina_Bool list_opt = EINA_FALSE;
-   Eina_Bool stats_opt = EINA_FALSE;
    Eina_Bool gen_opt = EINA_FALSE;
    char *add_opt = NULL;
    char *del_opt = NULL;
@@ -220,7 +218,6 @@ main(int    argc,
         ECORE_GETOPT_VALUE_STR(add_opt),
         ECORE_GETOPT_VALUE_STR(del_opt),
         ECORE_GETOPT_VALUE_STR(get_opt),
-        ECORE_GETOPT_VALUE_BOOL(stats_opt),
         ECORE_GETOPT_VALUE_BOOL(gen_opt),
         ECORE_GETOPT_VALUE_STR(replace_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
