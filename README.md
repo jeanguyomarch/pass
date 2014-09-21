@@ -1,61 +1,56 @@
 pass
 ====
 
+Password manager
+----------------
+
+A file `~/.pass_db` is created. It is an EET file which uses key-value couples. A key is associated to an encrypted password.
+
+Usage
+-----
+
+* `pass -l`: lists all keys
+* `pass -a MyKey`: adds __MyKey__ to the keys
+* `pass -x MyKey`: extracts the password for the key __MyKey__
+* `pass -d MyKey`: deletes the couple __MyKey__/associated password
+* `pass -r MyKey`: replaces the contents of __MyKey__
+
 
 Requirements
 ------------
 
-* `eet` must be installed http://docs.enlightenment.org/stable/eet/index.html
-* `openssl`
-* For now, the script is only Mac OS X compatible, feel free to make it portable.
+* `EFL` must be installed http://docs.enlightenment.org/stable/eet/index.html
 
-
-Password manager
-----------------
-
-* A file `~/.cryptofile` is an EET file that contains a password for a given key. It is possible to encrypt it using the eet encryption.
-* `pass -h` : query help
-* `pass -V` : query version
-* `pass -L` : query license
-* `man path` for full info
 
 
 Installation
 ------------
 
-* Query help: `./install.sh --help` or `./install.sh -h` `./install.sh -help`
-* To install it at `/usr/local` just run `./install.sh`. Requirements checks are made, and your password will be asked if all the requirements are fulfilled.
-* To install it at a custom prefix: `./install.sh /your/custom/prefix`
+* `make`
+* `sudo make install` (you can override the `PREFIX` variable to change the installation directory).
 
 
-Copying
+License
 -------
 
-Copyright notice for Eet:
+The MIT License (MIT)
 
-Copyright (C) 2002-2011 Carsten Haitzler and various contributors (see AUTHORS)
+Copyright (c) 2013 - 2014 Jean Guyomarc'h
 
-All rights reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-   1. Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-   2. Redistributions in binary form must reproduce the above copyright 
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
-INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
-OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-The pass license is under MIT license (see LICENSE.md)
