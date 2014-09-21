@@ -97,8 +97,6 @@ static const Ecore_Getopt _options =
       ECORE_GETOPT_STORE_STR('r', "replace", "Replace by the provided key"),
       ECORE_GETOPT_HELP ('h', "help"),
       ECORE_GETOPT_VERSION('V', "version"),
-      ECORE_GETOPT_COPYRIGHT('R', "copyright"),
-      ECORE_GETOPT_LICENSE('L', "license"),
       ECORE_GETOPT_SENTINEL
    }
 };
@@ -231,8 +229,6 @@ main(int    argc,
         ECORE_GETOPT_VALUE_STR(replace_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
-        ECORE_GETOPT_VALUE_BOOL(quit_opt),
-        ECORE_GETOPT_VALUE_BOOL(quit_opt),
         ECORE_GETOPT_VALUE_NONE
    };
 
@@ -292,7 +288,7 @@ main(int    argc,
    if (replace_opt)
      {
         status = 1;
-        CRI("The --replace option must be used with the --add option\n");
+        ERR("The --replace option must be used with the --add option\n");
         _help_show();
         goto end;
      }
