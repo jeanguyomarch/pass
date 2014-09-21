@@ -15,12 +15,16 @@ Usage
 * `pass -d MyKey`: deletes the couple __MyKey__/associated password
 * `pass -r MyKey`: replaces the contents of __MyKey__
 
+Documentation
+-------------
+
+`man pass` (after installation).
+
 
 Requirements
 ------------
 
-* `EFL` must be installed http://docs.enlightenment.org/stable/eet/index.html
-
+* `EFL` must be installed (http://web.enlightenment.org)
 
 
 Installation
