@@ -145,12 +145,16 @@ file_get(const char *key,
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, NULL);
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, NULL);
 
-   void *data;
+   char *data;
    int size;
 
    _file_open_ro();
    data = eet_read_cipher(_ef, key, &size, cipher);
    _file_close();
+
+   /* I really don't want newlines in the password! */
+   if (data[size - 1] == '\n')
+     data[--size] = 0;
 
    return data;
 }
