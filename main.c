@@ -95,6 +95,7 @@ static const Ecore_Getopt _options =
       ECORE_GETOPT_STORE_STR('x', "extract", "Extracts the entry for the given key"),
       ECORE_GETOPT_STORE_TRUE('g', "generate", "Generates a random password in your clipboard using openSSL"),
       ECORE_GETOPT_STORE_STR('r', "replace", "Replace by the provided key"),
+      ECORE_GETOPT_STORE_STR('R', "rename", "Rename the provided key"),
       ECORE_GETOPT_HELP ('h', "help"),
       ECORE_GETOPT_VERSION('V', "version"),
       ECORE_GETOPT_SENTINEL
@@ -202,6 +203,28 @@ _pass_extract(const char *key)
    return (!chk); // 0 if chk is TRUE
 }
 
+static int
+_pass_rename(const char *old_key,
+             const char *new_key)
+{
+   EINA_SAFETY_ON_NULL_RETURN_VAL(new_key, 2);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(old_key, 2);
+
+   if (!file_entry_exists(old_key))
+     {
+        ERR("Entry \"%s\" does not exist", old_key);
+        return 1;
+     }
+   if (file_entry_exists(new_key))
+     {
+        ERR("Entry \"%s\" already exists", new_key);
+        return 1;
+     }
+
+   return file_replace(old_key, new_key);
+}
+
+
 /*============================================================================*
  *                                    Main                                    *
  *============================================================================*/
@@ -217,6 +240,7 @@ main(int    argc,
    char *del_opt = NULL;
    char *get_opt = NULL;
    char *replace_opt = NULL;
+   char *rename_opt = NULL;
    int args;
    int status = EXIT_FAILURE;
 
@@ -227,6 +251,7 @@ main(int    argc,
         ECORE_GETOPT_VALUE_STR(get_opt),
         ECORE_GETOPT_VALUE_BOOL(gen_opt),
         ECORE_GETOPT_VALUE_STR(replace_opt),
+        ECORE_GETOPT_VALUE_STR(rename_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
         ECORE_GETOPT_VALUE_BOOL(quit_opt),
         ECORE_GETOPT_VALUE_NONE
@@ -284,11 +309,22 @@ main(int    argc,
         goto end;
      }
 
+   /* Rename an entry */
+   if (rename_opt)
+     {
+        if (!replace_opt)
+          {
+             ERR("This options must be used in pair with --replace");
+             goto end;
+          }
+        status = _pass_rename(rename_opt, replace_opt);
+        goto end;
+     }
+
    /* Only replace option */
    if (replace_opt)
      {
-        status = 1;
-        ERR("The --replace option must be used with the --add option\n");
+        ERR("The --replace option must be used with the --add or --rename option\n");
         _help_show();
         goto end;
      }

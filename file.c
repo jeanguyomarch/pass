@@ -155,6 +155,38 @@ file_get(const char *key,
    return data;
 }
 
+int
+file_replace(const char *old_key,
+             const char *new_key)
+{
+   CRI("This operation is not implemented, sorry");
+   return 127;
+//   EINA_SAFETY_ON_NULL_RETURN_VAL(new_key, 2);
+//   EINA_SAFETY_ON_NULL_RETURN_VAL(old_key, 2);
+//
+//   void *handle;
+//   int size;
+//   int status = 1;
+//
+//   _file_open_rw();
+//   handle = eet_read(_ef, old_key, &size);
+//   EINA_SAFETY_ON_NULL_GOTO(handle, end);
+//
+//   size = eet_write(_ef, new_key, handle, size, 1);
+//   EINA_SAFETY_ON_FALSE_GOTO(size, end_free);
+//
+//   size = eet_delete(_ef, old_key);
+//   EINA_SAFETY_ON_FALSE_GOTO(size, end_free);
+//
+//   status = 0;
+//
+//end_free:
+//   free(handle);
+//end:
+//   _file_close();
+//   return status;
+}
+
 Eina_Bool
 file_entry_exists(const char *key)
 {

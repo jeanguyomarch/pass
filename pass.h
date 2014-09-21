@@ -26,6 +26,7 @@ int file_list(void);
 int file_add(const char *key, const char *data, const char *cipher);
 int file_del(const char *key);
 char *file_get(const char *key, const char *cipher);
+int file_replace(const char *old_key, const char *new_key);
 
 Eina_Bool clipboard_init(void);
 void clipboard_shutdown(void);
