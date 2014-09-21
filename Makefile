@@ -6,6 +6,8 @@ PKG_LDFLAGS = $(shell pkg-config --libs $(PKG_LIBS))
 OBJS = main.o file.o clipboard.o tty.o
 BIN = pass
 
+PREFIX = /usr/local
+
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Darwin)
@@ -28,4 +30,8 @@ $(BIN): $(OBJS)
 clean:
 	rm -f $(OBJS)
 	rm -f $(BIN)
+
+install:
+	install -m 0755 $(BIN) "$(PREFIX)/bin"
+	install -g 0 -o 0 -m 0644 pass.1 "$(PREFIX)/share/man/man1"
 
