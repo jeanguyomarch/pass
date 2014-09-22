@@ -5,7 +5,7 @@
 .SH NAME
 pass \- password manager
 .SH SYNOPSIS
-pass -ladxgrRhV
+pass -lfadxgrRhV
 .SH DESCRIPTION
 pass allows you to manage your passwords in an encrypted file
 
@@ -20,6 +20,9 @@ then enter your cipher key. '1234' is now in your clipboard if you entered the r
 
 .SH OPTIONS
 
+.TP
+.BR \-f,--file " "\fIpath\fR
+   specify the file to use at <path>
 .TP
 .BR \-a,--add " "\fIkey\fR
    add a password for <key>
