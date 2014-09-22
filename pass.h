@@ -17,7 +17,7 @@ extern int _pass_log_dom;
 #define INF(...) EINA_LOG_DOM_INFO(_pass_log_dom, __VA_ARGS__)
 #define DBG(...) EINA_LOG_DOM_DBG(_pass_log_dom, __VA_ARGS__)
 
-Eina_Bool file_init(void);
+Eina_Bool file_init(const char *file);
 void file_shutdown(void);
 Eina_Bool file_entry_exists(const char *key);
 

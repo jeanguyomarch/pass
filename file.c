@@ -10,13 +10,19 @@ static Eet_File *_ef = NULL;
  *============================================================================*/
 
 Eina_Bool
-file_init(void)
+file_init(const char *file)
 {
    char buf[PATH_MAX];
    int len;
 
-   len = snprintf(buf, sizeof(buf), "%s/.pass_db", getenv("HOME"));
-   _file = strndup(buf, len);
+   if (file == NULL)
+     {
+        len = snprintf(buf, sizeof(buf), "%s/.pass_db", getenv("HOME"));
+        _file = strndup(buf, len);
+     }
+   else
+     _file = strdup(file);
+
    EINA_SAFETY_ON_NULL_GOTO(_file, path_err);
 
    _ef = eet_open(_file, EET_FILE_MODE_READ_WRITE);

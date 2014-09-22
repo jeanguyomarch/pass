@@ -23,7 +23,7 @@ _stdout(const char *format, ...)
  *============================================================================*/
 
 static inline Eina_Bool
-_init(void)
+_init(const char *file)
 {
    int chk;
 
@@ -42,7 +42,7 @@ _init(void)
    chk = clipboard_init();
    EINA_SAFETY_ON_FALSE_GOTO(chk, clipboard_err);
 
-   chk = file_init();
+   chk = file_init(file);
    EINA_SAFETY_ON_FALSE_GOTO(chk, file_err);
 
    chk = tty_init();
@@ -126,11 +126,12 @@ static const Ecore_Getopt _options =
    "pass",
    "%prog [options] (at least one)",
    "1.1",
-   "(C) 2013-2014 Jean Guyomarc'h",
+   "2013-2014 © Jean Guyomarc'h",
    "MIT",
    "A command-line password manager",
    EINA_TRUE,
    {
+      ECORE_GETOPT_STORE_STR('f', "file", "Provide the path of the file to be used"),
       ECORE_GETOPT_STORE_TRUE('l', "list", "Display the list of stored data"),
       ECORE_GETOPT_STORE_STR('a', "add", "Add a new string to the encrypted database"),
       ECORE_GETOPT_STORE_STR('d', "delete", "Deletes the entry for the given key"),
@@ -282,12 +283,14 @@ main(int    argc,
    char *add_opt = NULL;
    char *del_opt = NULL;
    char *get_opt = NULL;
+   char *file_name = NULL;
    char *replace_opt = NULL;
    // FIXME  char *rename_opt = NULL;
    int args;
    int status = EXIT_FAILURE;
 
    Ecore_Getopt_Value values[] = {
+        ECORE_GETOPT_VALUE_STR(file_name),
         ECORE_GETOPT_VALUE_BOOL(list_opt),
         ECORE_GETOPT_VALUE_STR(add_opt),
         ECORE_GETOPT_VALUE_STR(del_opt),
@@ -312,7 +315,7 @@ main(int    argc,
    if (quit_opt)
      return EXIT_SUCCESS;
 
-   if (EINA_UNLIKELY(!_init()))
+   if (EINA_UNLIKELY(!_init(file_name)))
      return EXIT_FAILURE;
 
    /* List all entries */
