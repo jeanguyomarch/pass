@@ -3,31 +3,7 @@
 static char *_file = NULL;
 static Eet_File *_ef = NULL;
 
-/*============================================================================*
- *                                   Helpers                                  *
- *============================================================================*/
-
-static inline Eina_Bool
-_file_open_ro(void)
-{
-   _ef = eet_open(_file, EET_FILE_MODE_READ);
-   return !!_ef;
-}
-
-static inline Eina_Bool
-_file_open_rw(void)
-{
-   _ef = eet_open(_file, EET_FILE_MODE_READ_WRITE);
-   return !!_ef;
-}
-
-static inline void
-_file_close(void)
-{
-   eet_close(_ef);
-   _ef = NULL;
-}
-
+#define COMPRESS 1 /* 1: YES; 0: NO */
 
 /*============================================================================*
  *                                Init/Shutdown                               *
@@ -43,8 +19,13 @@ file_init(void)
    _file = strndup(buf, len);
    EINA_SAFETY_ON_NULL_GOTO(_file, path_err);
 
+   _ef = eet_open(_file, EET_FILE_MODE_READ_WRITE);
+   EINA_SAFETY_ON_NULL_GOTO(_ef, file_err);
+
    return EINA_TRUE;
 
+file_err:
+   free(_file);
 path_err:
    return EINA_FALSE;
 }
@@ -52,12 +33,18 @@ path_err:
 void
 file_shutdown(void)
 {
+   Eet_Error err;
+
+   err = eet_sync(_ef);
+   if (err != EET_ERROR_NONE)
+     CRI("eet_sync() failed with error %i", err);
+   err = eet_close(_ef);
+   if (err != EET_ERROR_NONE)
+     CRI("eet_close() failed with error %i", err);
+   _ef = NULL;
+
    free(_file);
-   if (_ef)
-     {
-        ERR("It seems Eet_File was not closed. I'll do it for you...");
-        _file_close();
-     }
+   _file = NULL;
 }
 
 int
@@ -67,12 +54,6 @@ file_list(void)
    Eet_Entry *entry;
    Eina_Iterator *entries;
 
-   if (!_file_open_ro())
-     {
-        INF("No entry available");
-        return 1;
-     }
-
    count = eet_num_entries(_ef);
    entries = eet_list_entries(_ef);
 
@@ -80,7 +61,6 @@ file_list(void)
       output("%s\n", entry->name);
    eina_iterator_free(entries);
 
-   _file_close();
    return 0;
 }
 
@@ -94,28 +74,18 @@ file_add(const char *key,
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, 2);
 
    int size;
+   int status = 0;
 
-   if (!_file_open_rw())
-     {
-        CRI("Failed to open file %s", _file);
-        return 1;
-     }
-
-   size = eet_write_cipher(_ef, key, data, strlen(data), 1, cipher);
+   size = eet_write_cipher(_ef, key, data, strlen(data), COMPRESS, cipher);
    if (size == 0)
      {
         CRI("Failed to register entry \"%s\"", key);
-        goto stop;
+        status = 1;
      }
    else
      INF("Save data for entry \"%s\"", key);
 
-   _file_close();
-   return 0;
-
-stop:
-   _file_close();
-   return 1;
+   return status;
 }
 
 int
@@ -125,11 +95,8 @@ file_del(const char *key)
 
    int chk;
 
-   _file_open_rw();
    chk = eet_delete(_ef, key);
-   _file_close();
-
-   if (chk == 0)
+   if (EINA_UNLIKELY(chk == 0))
      {
         CRI("Failed to delete entry \"%s\"", key);
         return 2;
@@ -148,9 +115,7 @@ file_get(const char *key,
    char *data;
    int size;
 
-   _file_open_ro();
    data = eet_read_cipher(_ef, key, &size, cipher);
-   _file_close();
 
    /* I really don't want newlines in the password! */
    if (data[size - 1] == '\n')
@@ -172,7 +137,6 @@ file_replace(const char *old_key,
 //   int size;
 //   int status = 1;
 //
-//   _file_open_rw();
 //   handle = eet_read(_ef, old_key, &size);
 //   EINA_SAFETY_ON_NULL_GOTO(handle, end);
 //
@@ -186,8 +150,6 @@ file_replace(const char *old_key,
 //
 //end_free:
 //   free(handle);
-//end:
-//   _file_close();
 //   return status;
 }
 
@@ -196,13 +158,14 @@ file_entry_exists(const char *key)
 {
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, EINA_FALSE);
 
+#if COMPRESS
    void *handle;
-   int size;
-
-   _file_open_ro();
-   handle = eet_read(_ef, key, &size);
-   _file_close();
+   handle = eet_read(_ef, key, NULL);
    free(handle);
+#else
+   const void *handle;
+   handle = eet_read_direct(_ef, key, NULL);
+#endif
 
    return (handle != NULL);
 }

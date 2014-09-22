@@ -71,8 +71,10 @@ _shutdown(void)
    file_shutdown();
    clipboard_shutdown();
    eina_log_domain_unregister(_pass_log_dom);
+   _pass_log_dom = -1;
    eet_shutdown();
    eina_shutdown();
+   output = NULL;
 }
 
 /*============================================================================*
