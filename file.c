@@ -42,10 +42,10 @@ file_shutdown(void)
    Eet_Error err;
 
    err = eet_sync(_ef);
-   if (err != EET_ERROR_NONE)
+   if (EINA_UNLIKELY(err != EET_ERROR_NONE))
      CRI("eet_sync() failed with error %i", err);
    err = eet_close(_ef);
-   if (err != EET_ERROR_NONE)
+   if (EINA_UNLIKELY(err != EET_ERROR_NONE))
      CRI("eet_close() failed with error %i", err);
    _ef = NULL;
 
