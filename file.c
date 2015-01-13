@@ -80,18 +80,16 @@ file_add(const char *key,
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, 2);
 
    int size;
-   int status = 0;
 
    size = eet_write_cipher(_ef, key, data, strlen(data), COMPRESS, cipher);
    if (size == 0)
      {
         CRI("Failed to register entry \"%s\"", key);
-        status = 1;
+        return 1;
      }
-   else
-     INF("Save data for entry \"%s\"", key);
 
-   return status;
+   INF("Save data for entry \"%s\"", key);
+   return 0;
 }
 
 int
@@ -108,6 +106,7 @@ file_del(const char *key)
         return 2;
      }
 
+   INF("Delete data for entry \"%s\"", key);
    return 0;
 }
 
@@ -122,10 +121,12 @@ file_get(const char *key,
    int size;
 
    data = eet_read_cipher(_ef, key, &size, cipher);
+   INF("Data after extraction: \"%s\" (size: %i)", data, size);
 
    /* I really don't want newlines in the password! */
-   if (data[size - 1] == '\n')
-     data[--size] = 0;
+   size--;
+   if (data[size] == '\n')
+     data[size] = 0;
 
    return data;
 }
