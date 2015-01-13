@@ -85,8 +85,8 @@ static int
 _password_gen(unsigned char len)
 {
    /* Ascii characters to use */
-   int start = 32, stop = 125;
-   int nope[] = {
+   const int start = 32, stop = 125;
+   const int nope[] = {
         96, // ` (grave accent)
         0   // SENTINEL
    };
@@ -103,7 +103,7 @@ again:
         buf[i] = rand() % (stop - start) + start;
 
         /* Reject nope characters */
-        ptr = nope;
+        ptr = (int *)nope;
         while (*ptr != 0)
           {
              if (buf[i] == *ptr)
