@@ -81,7 +81,7 @@ file_add(const char *key,
 
    int size;
 
-   size = eet_write_cipher(_ef, key, data, strlen(data), COMPRESS, cipher);
+   size = eet_write_cipher(_ef, key, data, strlen(data) + 1, COMPRESS, cipher);
    if (size == 0)
      {
         CRI("Failed to register entry \"%s\"", key);
