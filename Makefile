@@ -28,8 +28,8 @@ $(BIN): $(OBJS)
 	$(CC) $(FLAGS) -o $@ $^ $(PKG_LDFLAGS)
 
 clean:
-	rm -f $(OBJS)
-	rm -f $(BIN)
+	$(RM) $(OBJS)
+	$(RM) $(BIN)
 
 install:
 	install -m 0755 $(BIN) "$(PREFIX)/bin"
