@@ -16,6 +16,7 @@ _stdout(const char *format, ...)
    va_start(args, format);
    vfprintf(stdout, format, args);
    va_end(args);
+   fflush(stdout);
 }
 
 /*============================================================================*
@@ -170,9 +171,9 @@ _pass_add(const char *key,
         return 2;
      }
 
-   output("Write the data you want to store:\n");
+   output("Write the data you want to store: ");
    password = tty_string_silent_get(NULL);
-   output("Write a cipher key to encrypt the data:\n");
+   output("Write a cipher key to encrypt the data: ");
    cipher = tty_string_silent_get(NULL);
 
    if (EINA_UNLIKELY(!password) || EINA_UNLIKELY(!cipher))
@@ -232,7 +233,7 @@ _pass_extract(const char *key)
         return 1;
      }
 
-   output("Write your decipher key:\n");
+   output("Write your decipher key: ");
    cipher = tty_string_silent_get(NULL);
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, 2);
 

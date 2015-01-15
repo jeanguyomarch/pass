@@ -103,6 +103,7 @@ tty_string_silent_get(int *length)
    _stdin_hide();
    ptr = tty_string_get(length);
    _stdin_restore();
+   output("\n");
 
    return ptr;
 }
