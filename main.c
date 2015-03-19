@@ -238,6 +238,12 @@ _pass_extract(const char *key)
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, 2);
 
    data = file_get(key, cipher);
+   if (data == NULL)
+     {
+        free(cipher);
+        return 2;
+     }
+
    chk = clipboard_set(data, -1);
    if (!chk)
      CRI("Failed to set data to clipboard");

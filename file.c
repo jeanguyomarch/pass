@@ -121,6 +121,11 @@ file_get(const char *key,
    int size;
 
    data = eet_read_cipher(_ef, key, &size, cipher);
+   if (data == NULL)
+     {
+        ERR("Wrong cipher for key \"%s\"", key);
+        return NULL;
+     }
    INF("Data after extraction: \"%s\" (size: %i)", data, size);
 
    /* I really don't want newlines in the password! */
