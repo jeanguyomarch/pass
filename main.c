@@ -23,7 +23,7 @@ _stdout(const char *format, ...)
  *                                Init/Shutdown                               *
  *============================================================================*/
 
-static inline Eina_Bool
+static Eina_Bool
 _init(const char *file)
 {
    int chk;
@@ -65,7 +65,7 @@ eina_err:
    return EINA_FALSE;
 }
 
-static inline void
+static void
 _shutdown(void)
 {
    tty_shutdown();
