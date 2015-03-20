@@ -207,10 +207,15 @@ _pass_del(const char *key)
 
    output("Are you sure to delete \"%s\". It cannot be recovered! [y/N] ", key);
    str = tty_string_get(NULL);
-   if ((str != NULL) && (str[0] == 'y' || str[0] == 'Y'))
-     status = file_del(key);
-   else
+   if (str == NULL)
      status = 1;
+   else
+     {
+        if (str[0] == 'y' || str[0] == 'Y')
+          status = file_del(key);
+        else
+          status = 0;
+     }
    free(str);
 
    return status;
