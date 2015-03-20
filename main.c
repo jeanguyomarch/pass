@@ -192,11 +192,9 @@ end:
 }
 
 static int
-_pass_del(const char *key,
-          const char *verb)
+_pass_del(const char *key)
 {
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, 2);
-   EINA_SAFETY_ON_NULL_RETURN_VAL(verb, 2);
 
    char *str;
    int status;
@@ -207,8 +205,7 @@ _pass_del(const char *key,
         return 1;
      }
 
-   output("Are you sure to %s \"%s\". It cannot be recovered! [y/N] ",
-          verb, key);
+   output("Are you sure to delete \"%s\". It cannot be recovered! [y/N] ", key);
    str = tty_string_get(NULL);
    if ((str != NULL) && (str[0] == 'y' || str[0] == 'Y'))
      status = file_del(key);
@@ -342,7 +339,7 @@ main(int    argc,
    /* Delete an entry */
    if (del_opt)
      {
-        status = _pass_del(del_opt, "delete");
+        status = _pass_del(del_opt);
         goto end;
      }
 
