@@ -205,16 +205,23 @@ _pass_del(const char *key)
         return 1;
      }
 
+again:
    output("Are you sure to delete \"%s\". It cannot be recovered! [y/N] ", key);
    str = tty_string_get(NULL);
    if (str == NULL)
      status = 1;
    else
      {
-        if (str[0] == 'y' || str[0] == 'Y')
+        if ((!strncasecmp(str, "y", 1)) || (!strncasecmp(str, "yes", 3)))
           status = file_del(key);
-        else
+        else if ((str[0] == 0) || /* User pressed [ENTER] */
+                 (!strncasecmp(str, "n", 1)) || (!strncasecmp(str, "no", 2)))
           status = 0;
+        else
+          {
+             ERR("Please answer yes/y or no/n.");
+             goto again;
+          }
      }
    free(str);
 
