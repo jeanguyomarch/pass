@@ -85,7 +85,7 @@ tty_string_get(int *lenght)
      }
 
    /* Removing trailing newline */
-   ptr[len--] = 0;
+   ptr[--len] = 0;
 
    if (lenght) *lenght = len;
    return strndup(ptr, len);

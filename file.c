@@ -128,11 +128,6 @@ file_get(const char *key,
      }
    INF("Data after extraction: \"%s\" (size: %i)", data, size);
 
-   /* I really don't want newlines in the password! */
-   size--;
-   if (data[size] == '\n')
-     data[size] = 0;
-
    return data;
 }
 
