@@ -58,13 +58,15 @@ tty_shutdown(void)
  *============================================================================*/
 
 char *
-tty_string_get(int *length)
+tty_string_get(int       *length,
+               Eina_Bool  safe)
 {
-   char *ptr;
-   char buf[512];
+   char *ptr, *tmp;
+   char buf[512] = {};
    int len;
 
-   memset(buf, 0, sizeof(buf));
+   /* Never swap this */
+   if (safe) mlock(buf, sizeof(buf));
 
    /* Get string from stdin (safe) */
    ptr = fgets(buf, sizeof(buf), stdin);
@@ -85,13 +87,32 @@ tty_string_get(int *length)
      }
 
    /* Removing trailing newline */
-   ptr[--len] = 0;
+   ptr[len - 1] = 0;
 
-   if (length) *length = len;
-   return strndup(ptr, len);
+   /* Allocate return buffer */
+   tmp = malloc(len);
+   if (EINA_UNLIKELY(tmp == NULL))
+     {
+        CRI("Failed to allocate memory");
+        goto fail;
+     }
+
+   /* Never swap this */
+   if (safe) mlock(tmp, len); /* Receiver is resposible of munlock()ing */
+   memcpy(tmp, buf, len);
+
+   memset(buf, 0, sizeof(buf));
+   if (safe) munlock(buf, sizeof(buf));
+
+   if (length) *length = len - 1;
+   len = 0;
+   return tmp;
 
 fail:
+   memset(buf, 0, sizeof(buf));
+   if (safe) munlock(buf, sizeof(buf));
    if (length) *length = -1;
+   len = 0;
    return NULL;
 }
 
@@ -101,7 +122,7 @@ tty_string_silent_get(int *length)
    char *ptr;
 
    _stdin_hide();
-   ptr = tty_string_get(length);
+   ptr = tty_string_get(length, EINA_TRUE);
    _stdin_restore();
    output("\n");
 

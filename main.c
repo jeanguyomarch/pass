@@ -188,12 +188,14 @@ end:
    if (password)
      {
         memset(password, 0, password_len);
+        munlock(password, password_len + 1);
         password_len = 0;
         free(password);
      }
    if (cipher)
      {
         memset(cipher, 0, cipher_len);
+        munlock(cipher, cipher_len + 1);
         cipher_len = 0;
         free(cipher);
      }
@@ -217,7 +219,7 @@ _pass_del(const char *key)
 
 again:
    output("Are you sure to delete \"%s\". It cannot be recovered! [y/N] ", key);
-   str = tty_string_get(NULL);
+   str = tty_string_get(NULL, EINA_FALSE);
    if (str == NULL)
      status = 1;
    else
@@ -244,6 +246,7 @@ _pass_extract(const char *key)
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, 2);
 
    char *data, *cipher;
+   int cipher_len, data_len;
    Eina_Bool chk;
 
    if (!file_entry_exists(key))
@@ -253,13 +256,15 @@ _pass_extract(const char *key)
      }
 
    output("Write your decipher key: ");
-   cipher = tty_string_silent_get(NULL);
+   cipher = tty_string_silent_get(&cipher_len);
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, 2);
 
-   data = file_get(key, cipher);
+   data = file_get(key, cipher, &data_len);
    if (data == NULL)
      {
-        free(cipher);
+        ZERO_MUNLOCK(cipher, cipher_len);
+        FREE(cipher);
+        cipher_len = 0;
         return 2;
      }
 
@@ -267,8 +272,11 @@ _pass_extract(const char *key)
    if (!chk)
      CRI("Failed to set data to clipboard");
 
-   free(cipher);
-   free(data);
+   ZERO_MUNLOCK(cipher, cipher_len);
+   ZERO_MUNLOCK(data, data_len);
+   FREE(cipher);
+   FREE(data);
+   cipher_len = 0;
 
    return (!chk); // 0 if chk is TRUE
 }

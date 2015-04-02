@@ -112,7 +112,8 @@ file_del(const char *key)
 
 char *
 file_get(const char *key,
-         const char *cipher)
+         const char *cipher,
+         int        *length)
 {
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, NULL);
    EINA_SAFETY_ON_NULL_RETURN_VAL(cipher, NULL);
@@ -126,8 +127,9 @@ file_get(const char *key,
         ERR("Wrong cipher for key \"%s\"", key);
         return NULL;
      }
-   INF("Data after extraction: \"%s\" (size: %i)", data, size);
-
+   mlock(data, size);
+   if (length) *length = size;
+   size = 0;
    return data;
 }
 
