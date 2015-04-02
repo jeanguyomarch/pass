@@ -163,7 +163,7 @@ _pass_add(const char *key,
    EINA_SAFETY_ON_NULL_RETURN_VAL(key, 2);
 
    char *password = NULL, *cipher = NULL;
-   int status;
+   int status, password_len, cipher_len;
 
    if (strict && file_entry_exists(key))
      {
@@ -172,9 +172,9 @@ _pass_add(const char *key,
      }
 
    output("Write the data you want to store: ");
-   password = tty_string_silent_get(NULL);
+   password = tty_string_silent_get(&password_len);
    output("Write a cipher key to encrypt the data: ");
-   cipher = tty_string_silent_get(NULL);
+   cipher = tty_string_silent_get(&cipher_len);
 
    if (EINA_UNLIKELY(!password) || EINA_UNLIKELY(!cipher))
      {
@@ -185,8 +185,18 @@ _pass_add(const char *key,
    status = file_add(key, password, cipher);
 
 end:
-   free(password);
-   free(cipher);
+   if (password)
+     {
+        memset(password, 0, password_len);
+        password_len = 0;
+        free(password);
+     }
+   if (cipher)
+     {
+        memset(cipher, 0, cipher_len);
+        cipher_len = 0;
+        free(cipher);
+     }
 
    return status;
 }
