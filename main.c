@@ -338,7 +338,7 @@ main(int    argc,
    };
 
    args = ecore_getopt_parse(&_options, values, argc, argv);
-   if (args == 1)
+   if (args != argc)
      {
         _help_show();
         return EXIT_FAILURE;
