@@ -58,7 +58,7 @@ tty_shutdown(void)
  *============================================================================*/
 
 char *
-tty_string_get(int *lenght)
+tty_string_get(int *length)
 {
    char *ptr;
    char buf[512];
@@ -87,11 +87,11 @@ tty_string_get(int *lenght)
    /* Removing trailing newline */
    ptr[--len] = 0;
 
-   if (lenght) *lenght = len;
+   if (length) *length = len;
    return strndup(ptr, len);
 
 fail:
-   if (lenght) *lenght = -1;
+   if (length) *length = -1;
    return NULL;
 }
 
