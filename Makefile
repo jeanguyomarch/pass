@@ -26,10 +26,8 @@ AT = $(AT_$(V))
 all: $(BIN) Makefile pass.h
 
 %.o: %.m
-ifeq ($(UNAME), Darwin)
 	@echo "  OBJC    $<"
 	$(AT)$(CC) $(FLAGS) -c -o $@ $^ $(PKG_CFLAGS)
-endif
 
 %.o: %.c
 	@echo "  CC      $<"
