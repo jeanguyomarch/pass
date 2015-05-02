@@ -16,18 +16,28 @@ ifeq ($(UNAME), Darwin)
    OBJS += clipboard_cocoa.o
 endif
 
+V = 0
+AT_0 := @
+AT_1 :=
+AT = $(AT_$(V))
+
 .PHONY: all clean install
+
+all: $(BIN) Makefile pass.h
 
 %.o: %.m
 ifeq ($(UNAME), Darwin)
-	$(CC) $(FLAGS) -c -o $@ $^ $(PKG_CFLAGS)
+	@echo "  OBJC    $<"
+	$(AT)$(CC) $(FLAGS) -c -o $@ $^ $(PKG_CFLAGS)
 endif
 
 %.o: %.c
-	$(CC) $(FLAGS) -c -o $@ $^ $(PKG_CFLAGS)
+	@echo "  CC      $<"
+	$(AT)$(CC) $(FLAGS) -c -o $@ $^ $(PKG_CFLAGS)
 
 $(BIN): $(OBJS)
-	$(CC) $(FLAGS) -o $@ $^ $(PKG_LDFLAGS)
+	@echo "  LD      $@"
+	$(AT)$(CC) $(FLAGS) -o $@ $^ $(PKG_LDFLAGS)
 
 clean:
 	$(RM) $(OBJS)
