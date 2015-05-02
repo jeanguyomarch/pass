@@ -55,8 +55,16 @@ _stdin_restore(void)
 Eina_Bool
 tty_init(void)
 {
+   int ret;
+
    /* Save current term, and prepare input mode */
-   tcgetattr(STDIN_FILENO, &_old_termios);
+   ret = tcgetattr(STDIN_FILENO, &_old_termios);
+   if (EINA_UNLIKELY(ret == -1))
+     {
+        CRI("Failed to get termios settings for stdin. Error: %s",
+            strerror(errno));
+        return EINA_FALSE;
+     }
    memcpy(&_new_termios, &_old_termios, sizeof(struct termios));
 
    /* Silent input */
