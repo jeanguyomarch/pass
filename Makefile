@@ -16,7 +16,7 @@ ifeq ($(UNAME), Darwin)
    OBJS += clipboard_cocoa.o
 endif
 
-V = 0
+V := 0
 AT_0 := @
 AT_1 :=
 AT = $(AT_$(V))
