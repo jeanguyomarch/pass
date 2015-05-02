@@ -8,25 +8,44 @@ static Eina_Bool _hidden = EINA_FALSE;
  *                                   Helpers                                  *
  *============================================================================*/
 
-static inline void
+static inline Eina_Bool
 _stdin_hide(void)
 {
+   int ret;
+
    if (_hidden == EINA_FALSE)
      {
-        tcsetattr(STDIN_FILENO, TCSANOW, &_new_termios);
+        ret = tcsetattr(STDIN_FILENO, TCSANOW, &_new_termios);
+        if (EINA_UNLIKELY(ret == -1))
+          {
+             CRI("Failed to mask stdin. Cannot continue because presents "
+                 "obvious security risks. Error: %s", strerror(errno));
+             return EINA_FALSE;
+          }
         _hidden = EINA_TRUE;
      }
 
+   return EINA_TRUE;
 }
 
-static inline void
+static inline Eina_Bool
 _stdin_restore(void)
 {
+   int ret;
+
    if (_hidden == EINA_TRUE)
      {
-        tcsetattr(STDIN_FILENO, TCSANOW, &_old_termios);
+        ret = tcsetattr(STDIN_FILENO, TCSANOW, &_old_termios);
+        if (EINA_UNLIKELY(ret == -1))
+          {
+             CRI("Failed to restore stdin settings. Something fishy is going "
+                 "on there. I stop here. Error: %s", strerror(errno));
+             return EINA_FALSE;
+          }
         _hidden = EINA_FALSE;
      }
+
+   return EINA_TRUE;
 }
 
 /*============================================================================*
@@ -121,13 +140,26 @@ fail:
 char *
 tty_string_silent_get(int *length)
 {
+   EINA_SAFETY_ON_NULL_RETURN_VAL(length, NULL);
+
    char *ptr;
+   Eina_Bool chk;
 
-   _stdin_hide();
+   chk = _stdin_hide();
+   if (EINA_UNLIKELY(!chk))
+     return NULL;
+
    ptr = tty_string_get(length, EINA_TRUE);
-   _stdin_restore();
-   output("\n");
+   chk = _stdin_restore();
+   if (EINA_UNLIKELY(!chk))
+     {
+        ZERO_MUNLOCK(ptr, *length);
+        FREE(ptr);
+        *length = 0;
+        return NULL;
+     }
 
+   output("\n");
    return ptr;
 }
 
