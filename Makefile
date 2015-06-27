@@ -1,4 +1,4 @@
-FLAGS := -Wall -O2
+FLAGS := -Wall -Wextra -Wshadow -O2
 PKG_LIBS := eina eet ecore ecore-file
 PKG_CFLAGS := $(shell pkg-config --cflags $(PKG_LIBS))
 PKG_LDFLAGS := $(shell pkg-config --libs $(PKG_LIBS))
