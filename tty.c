@@ -108,7 +108,7 @@ tty_string_get(int       *length,
 
    /* Control the size */
    len = strlen(ptr);
-   if (len >= sizeof(buf) - 1)
+   if (len >= (int)(sizeof(buf) - 1))
      {
         ERR("Your text is %i bytes. The maximum allowed is %zu.",
             len, sizeof(buf) - 1);
