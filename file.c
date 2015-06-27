@@ -134,8 +134,8 @@ file_get(const char *key,
 }
 
 int
-file_replace(const char *old_key,
-             const char *new_key)
+file_replace(const char *old_key EINA_UNUSED,
+             const char *new_key EINA_UNUSED)
 {
    CRI("This operation is not implemented, sorry");
    return 127;
