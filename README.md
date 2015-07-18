@@ -24,7 +24,7 @@ Documentation
 Requirements
 ------------
 
-* `EFL` must be installed (http://web.enlightenment.org)
+* `EFL` must be installed (http://www.enlightenment.org)
 
 
 Installation
