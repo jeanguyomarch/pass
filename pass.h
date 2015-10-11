@@ -54,6 +54,9 @@ extern Output_Func output;
 #ifdef HAVE_OSX
 Eina_Bool clipboard_cocoa_set(const char *data, int data_len);
 #endif
+#ifdef HAVE_LINUX
+Eina_Bool clipboard_elm_set(const char *data, int data_len);
+#endif
 
 #define ZERO_MUNLOCK(ptr_, len_) \
    do { \

@@ -1,12 +1,6 @@
 FLAGS := -Wall -Wextra -Wshadow -O2
 PKG_LIBS := eina eet ecore ecore-file
-PKG_CFLAGS := $(shell pkg-config --cflags $(PKG_LIBS))
-PKG_LDFLAGS := $(shell pkg-config --libs $(PKG_LIBS))
-
 OBJS := main.o file.o clipboard.o tty.o
-BIN := pass
-
-PREFIX := /usr/local
 
 UNAME := $(shell uname)
 
@@ -15,6 +9,18 @@ ifeq ($(UNAME), Darwin)
    PKG_LDFLAGS += -lobjc -framework Foundation -framework AppKit -fobjc-arc
    OBJS += clipboard_cocoa.o
 endif
+ifeq ($(UNAME), Linux)
+   FLAGS += -DHAVE_LINUX
+   PKG_LIBS += elementary
+   OBJS += clipboard_elm.o
+endif
+
+PKG_CFLAGS := $(shell pkg-config --cflags $(PKG_LIBS))
+PKG_LDFLAGS := $(shell pkg-config --libs $(PKG_LIBS))
+
+BIN := pass
+
+PREFIX := /usr/local
 
 V := 0
 AT_0 := @
