@@ -100,11 +100,11 @@ tty_string_get(int       *length,
 
    if (feof(stdin) || ferror(stdin) || ptr == NULL)
      {
-        if (safe) fpurge(stdin);
+        if (safe) fflush(stdin);
         CRI("An error occured while reading stdin");
         goto fail;
      }
-   if (safe) fpurge(stdin);
+   if (safe) fflush(stdin);
 
    /* Control the size */
    len = strlen(ptr);
