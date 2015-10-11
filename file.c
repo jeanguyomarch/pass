@@ -61,11 +61,15 @@ file_list(void)
    Eina_Iterator *entries;
 
    count = eet_num_entries(_ef);
-   entries = eet_list_entries(_ef);
-
-   EINA_ITERATOR_FOREACH(entries, entry)
-      output("%s\n", entry->name);
-   eina_iterator_free(entries);
+   if (count > 0)
+     {
+        entries = eet_list_entries(_ef);
+        EINA_ITERATOR_FOREACH(entries, entry)
+           output("%s\n", entry->name);
+        eina_iterator_free(entries);
+     }
+   else
+     output("No entries\n");
 
    return 0;
 }
