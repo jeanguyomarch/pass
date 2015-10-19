@@ -270,6 +270,7 @@ _pass_extract(const char *key)
      }
 
    chk = clipboard_set(data, data_len);
+   memset(data, 0, data_len);
    if (!chk)
      CRI("Failed to set data to clipboard");
 
