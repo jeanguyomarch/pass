@@ -46,7 +46,7 @@ clipboard_x_set(const char *data,
    ret = system(buf);
    if (ret != 0)
      {
-        ERR("Failed to set clipboard via xclip");
+        ERR("Failed to set clipboard via xclip --- is xclip in your PATH or installed?");
         return EINA_FALSE;
      }
 
