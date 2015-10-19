@@ -11,8 +11,6 @@ ifeq ($(UNAME), Darwin)
 endif
 ifeq ($(UNAME), Linux)
    FLAGS += -DHAVE_LINUX
-   PKG_LIBS += elementary
-   OBJS += clipboard_elm.o
 endif
 
 PKG_CFLAGS := $(shell pkg-config --cflags $(PKG_LIBS))
