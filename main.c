@@ -269,7 +269,7 @@ _pass_extract(const char *key)
         return 2;
      }
 
-   chk = clipboard_set(data, -1);
+   chk = clipboard_set(data, data_len);
    if (!chk)
      CRI("Failed to set data to clipboard");
 
