@@ -114,6 +114,7 @@ again:
      }
    buf[len] = 0;
    chk = clipboard_set(buf, len);
+   memset(buf, 0, len);
 
    return (!chk); // 0 is chk was true
 }
