@@ -1,6 +1,6 @@
 FLAGS := -Wall -Wextra -Wshadow -O2
 PKG_LIBS := eina eet ecore ecore-file
-OBJS := main.o file.o clipboard.o tty.o
+OBJS := main.o file.o clipboard.o tty.o clipboard_x.o
 
 UNAME := $(shell uname)
 

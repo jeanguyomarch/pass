@@ -11,7 +11,7 @@ clipboard_init(void)
    clipboard_set = clipboard_cocoa_set;
 #endif
 #ifdef HAVE_LINUX
-   clipboard_set = clipboard_elm_set;
+   clipboard_set = clipboard_x_set;
 #endif
 
    if (EINA_UNLIKELY(clipboard_set == NULL))
