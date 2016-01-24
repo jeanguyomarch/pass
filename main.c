@@ -128,7 +128,7 @@ static const Ecore_Getopt _options =
    "pass",
    "%prog [options] (at least one)",
    "1.2",
-   "2013-2015 © Jean Guyomarc'h",
+   "2013-2016 © Jean Guyomarc'h",
    "MIT",
    "A command-line password manager",
    EINA_TRUE,
