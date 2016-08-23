@@ -4,6 +4,9 @@ OBJS := main.o file.o clipboard.o tty.o clipboard_x.o
 
 UNAME := $(shell uname)
 
+PKG_CFLAGS := $(shell pkg-config --cflags $(PKG_LIBS))
+PKG_LDFLAGS := $(shell pkg-config --libs $(PKG_LIBS))
+
 ifeq ($(UNAME), Darwin)
    FLAGS += -DHAVE_OSX
    PKG_LDFLAGS += -lobjc -framework Foundation -framework AppKit -fobjc-arc
@@ -12,9 +15,6 @@ endif
 ifeq ($(UNAME), Linux)
    FLAGS += -DHAVE_LINUX
 endif
-
-PKG_CFLAGS := $(shell pkg-config --cflags $(PKG_LIBS))
-PKG_LDFLAGS := $(shell pkg-config --libs $(PKG_LIBS))
 
 BIN := pass
 
