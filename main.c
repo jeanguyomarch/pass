@@ -280,7 +280,7 @@ _pass_extract(const char *key)
    FREE(data);
    cipher_len = 0;
 
-   return (!chk); // 0 if chk is TRUE
+   return chk ? 0 : -1;
 }
 
 static EINA_UNUSED int // FIXME << Remove EINA_UNUSED
