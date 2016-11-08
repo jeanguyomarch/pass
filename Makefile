@@ -48,4 +48,3 @@ clean:
 install:
 	install -m 0755 $(BIN) "$(PREFIX)/bin"
 	install -g 0 -o 0 -m 0644 $(BIN).1 "$(PREFIX)/share/man/man1/$(BIN).1"
-
