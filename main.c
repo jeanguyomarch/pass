@@ -30,7 +30,6 @@ _init(const char *file)
 
    /* Set logger */
    output = _stdout;
-   EINA_SAFETY_ON_NULL_RETURN_VAL(output, EINA_FALSE);
 
    chk = eina_init();
    EINA_SAFETY_ON_TRUE_GOTO(chk <= 0, eina_err);
