@@ -27,4 +27,3 @@ clipboard_cocoa_set(const char *data,
    return [_pb setData:[str dataUsingEncoding:NSUTF8StringEncoding]
                forType:NSPasteboardTypeString];
 }
-

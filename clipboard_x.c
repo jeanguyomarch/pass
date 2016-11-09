@@ -52,4 +52,3 @@ clipboard_x_set(const char *data,
 
    return EINA_TRUE;
 }
-

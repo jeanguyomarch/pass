@@ -71,4 +71,3 @@ Eina_Bool clipboard_x_set(const char *data, int data_len);
    } while (0)
 
 #endif /* ! _PASS_H_ */
-

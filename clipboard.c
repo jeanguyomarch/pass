@@ -28,4 +28,3 @@ clipboard_shutdown(void)
 {
    clipboard_set = NULL;
 }
-

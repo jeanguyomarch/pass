@@ -182,4 +182,3 @@ file_entry_exists(const char *key)
 
    return (handle != NULL);
 }
-

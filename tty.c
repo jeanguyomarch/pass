@@ -170,4 +170,3 @@ tty_string_silent_get(int *length)
    output("\n");
    return ptr;
 }
-
